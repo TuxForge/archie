@@ -37,10 +37,10 @@ Archie is a command-line tool for managing packages on Arch Linux, providing a s
 
 When you run `archie`, you will see the following prompt:
 
-    ```
+    ``
     Welcome to Archie, type "h" for help
     $
-    ```
+    ``
 
 You can then use the following commands:
 
