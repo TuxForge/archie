@@ -96,3 +96,7 @@ If you want to use `paru` instead of `yay` create a file in `$HOME` called `.arc
 ```bash
 touch $HOME/.archie-use-paru
 ```
+
+## License
+
+This program is licensed under the GNU General Public License. See the [LICENSE](https://github.com/zackychann/archie/blob/main/LICENSE) file for details.
