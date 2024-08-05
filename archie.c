@@ -4,6 +4,7 @@
 #include <unistd.h>
 
 #define MAX_INPUT_LENGTH 256
+#define COMMAND_BUFFER_SIZE 512
 
 int check_package_manager() {
     if (system("command -v yay > /dev/null 2>&1") == 0) {
@@ -37,43 +38,43 @@ void install_yay() {
 }
 
 void update_system(const char *package_manager) {
-    char command[256];
+    char command[COMMAND_BUFFER_SIZE];
     snprintf(command, sizeof(command), "%s -Syu", package_manager);
     system(command);
 }
 
 void install_package(const char *package_manager, const char *package) {
-    char command[256];
+    char command[COMMAND_BUFFER_SIZE];
     snprintf(command, sizeof(command), "%s -S %s", package_manager, package);
     system(command);
 }
 
 void remove_package(const char *package_manager, const char *package) {
-    char command[256];
+    char command[COMMAND_BUFFER_SIZE];
     snprintf(command, sizeof(command), "%s -R %s", package_manager, package);
     system(command);
 }
 
 void purge_package(const char *package_manager, const char *package) {
-    char command[256];
+    char command[COMMAND_BUFFER_SIZE];
     snprintf(command, sizeof(command), "%s -Rns %s", package_manager, package);
     system(command);
 }
 
 void clean_cache(const char *package_manager) {
-    char command[256];
+    char command[COMMAND_BUFFER_SIZE];
     snprintf(command, sizeof(command), "%s -Sc", package_manager);
     system(command);
 }
 
 void clean_orphans(const char *package_manager) {
-    char command[256];
+    char command[COMMAND_BUFFER_SIZE];
     snprintf(command, sizeof(command), "%s -Rns $(pacman -Qdtq)", package_manager);
     system(command);
 }
 
 void search_package(const char *package_manager, const char *package) {
-    char command[256];
+    char command[COMMAND_BUFFER_SIZE];
     snprintf(command, sizeof(command), "%s -Ss %s", package_manager, package);
     system(command);
 }
