@@ -80,7 +80,7 @@ You can also use the following command-line argument:
     / |   \ |  Written in C, powered by YAY and pacman.
     `" __ | |  This program may be freely redistributed under
      .'.''| |  the terms of the GNU General Public License.
-    / /   | |_ Coded with love by Gurov, maintained by scklss, added to AUR by keiran
+    / /   | |_ Coded with love by Gurov, maintained by scklss & Keiran
     \ \._,\ '/ Have fun <3
      `--'  `" 
     ```
