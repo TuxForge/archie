@@ -36,11 +36,10 @@ Archie is a command-line tool for managing packages on Arch Linux, providing a s
 ## Usage
 
 When you run `archie`, you will see the following prompt:
-
-    ``
-    Welcome to Archie, type "h" for help
-    $
-    ``
+```
+Welcome to Archie, type "h" for help
+$
+```
 
 You can then use the following commands:
 
@@ -58,10 +57,10 @@ You can then use the following commands:
 
 To install a package, type `i` and follow the prompt:
 
-    ```
-    $ i
-    Enter package name to install:
-    ```
+ ```
+ $ i
+ Enter package name to install:
+ ```
 
 ## Command-Line Arguments
 
@@ -70,7 +69,7 @@ You can also use the following command-line argument:
 - `--version` - Display the version information:
 
     ```sh
-    ./archie --version
+    archie --version
     ```
 
     Output:
