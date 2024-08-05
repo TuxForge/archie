@@ -67,7 +67,9 @@ void clean_cache(const char *package_manager) {
 }
 
 void clean_orphans(const char *package_manager) {
-    system("yay -Rns $(pacman -Qdtq)");
+    char command[256];
+    snprintf(command, sizeof(command), "%s -Rns $(pacman -Qdtq)", package_manager);
+    system(command);
 }
 
 void search_package(const char *package_manager, const char *package) {
@@ -118,9 +120,15 @@ void get_input(char *input, const char *prompt) {
     }
 }
 
+int is_valid_command(char command) {
+    return command == 'u' || command == 'i' || command == 'r' ||
+    command == 'p' || command == 'c' || command == 'o' ||
+    command == 's' || command == 'h' || command == 'q';
+}
+
 void handle_command(const char *input, const char *package_manager) {
     char choice = input[0];
-    if (strlen(input) == 1) {
+    if (strlen(input) == 1 && is_valid_command(choice)) {
         switch (choice) {
             case 'u':
                 update_system(package_manager);
@@ -161,56 +169,77 @@ void handle_command(const char *input, const char *package_manager) {
                 printf("Invalid option. Please correct your grammar and type a valid option.\n");
         }
     } else {
-        printf("Did you mean \"%c\"? (y/n): ", choice);
-        char response[10];
-        get_input(response, "");
-        if (strcmp(response, "y") == 0 || strcmp(response, "yes") == 0) {
-            switch (choice) {
-                case 'u':
-                    update_system(package_manager);
-                    break;
-                case 'i':
-                    printf("Enter package name to install: ");
-                    char package[MAX_INPUT_LENGTH];
-                    get_input(package, "");
-                    install_package(package_manager, package);
-                    break;
-                case 'r':
-                    printf("Enter package name to remove: ");
-                    get_input(package, "");
-                    remove_package(package_manager, package);
-                    break;
-                case 'p':
-                    printf("Enter package name to purge: ");
-                    get_input(package, "");
-                    purge_package(package_manager, package);
-                    break;
-                case 'c':
-                    clean_cache(package_manager);
-                    break;
-                case 'o':
-                    clean_orphans(package_manager);
-                    break;
-                case 's':
-                    printf("Enter package name to search: ");
-                    get_input(package, "");
-                    search_package(package_manager, package);
-                    break;
-                case 'h':
-                    display_help();
-                    break;
-                case 'q':
-                    exit(0);
-                default:
-                    printf("Invalid option. Please correct your grammar and type a valid option.\n");
+        if (is_valid_command(choice)) {
+            printf("Did you mean \"%c\"? (y/n): ", choice);
+            char response[10];
+            get_input(response, "");
+            if (strcmp(response, "y") == 0 || strcmp(response, "yes") == 0) {
+                switch (choice) {
+                    case 'u':
+                        update_system(package_manager);
+                        break;
+                    case 'i':
+                        printf("Enter package name to install: ");
+                        char package[MAX_INPUT_LENGTH];
+                        get_input(package, "");
+                        install_package(package_manager, package);
+                        break;
+                    case 'r':
+                        printf("Enter package name to remove: ");
+                        get_input(package, "");
+                        remove_package(package_manager, package);
+                        break;
+                    case 'p':
+                        printf("Enter package name to purge: ");
+                        get_input(package, "");
+                        purge_package(package_manager, package);
+                        break;
+                    case 'c':
+                        clean_cache(package_manager);
+                        break;
+                    case 'o':
+                        clean_orphans(package_manager);
+                        break;
+                    case 's':
+                        printf("Enter package name to search: ");
+                        get_input(package, "");
+                        search_package(package_manager, package);
+                        break;
+                    case 'h':
+                        display_help();
+                        break;
+                    case 'q':
+                        exit(0);
+                    default:
+                        printf("Invalid option. Please correct your grammar and type a valid option.\n");
+                }
+            } else {
+                display_help();
             }
         } else {
+            printf("Invalid input. Please input a valid command.\n");
             display_help();
         }
     }
 }
 
-int main() {
+void display_version() {
+    printf("    __     \n"
+    " .:--.'.   Archie v1.1 - Fast & easy package management for Arch Linux\n"
+    "/ |   \\ |  Written in C, powered by YAY and pacman.\n"
+    "`\" __ | |  This program may be freely redistributed under\n"
+    " .'.''| |  the terms of the GNU General Public License.\n"
+    "/ /   | |_ Coded with love by Gurov and maintained by scklss AKA skulls\n"
+    "\\ \\._,\\ '/ Have fun <3\n"
+    " `--'  `\" \n");
+}
+
+int main(int argc, char *argv[]) {
+    if (argc > 1 && strcmp(argv[1], "--version") == 0) {
+        display_version();
+        return 0;
+    }
+
     char input[MAX_INPUT_LENGTH];
     const char *package_manager;
 
