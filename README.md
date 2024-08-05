@@ -92,7 +92,7 @@ You can also use the following command-line argument:
 - `git` - For installing `yay` if it is not already installed
 
 ## Notes
-If you want to use `paru` instead of `yay` create a file in `$HOME` called `.archie-use-paru`, and it will install `paru` instead of `yay`
+Archie uses yay by default, but if you only have paru installed it'll use it. If you have both and you want to use `paru` instead of `yay` create a file in `$HOME` called `.archie-use-paru`, and it will install `paru` instead of `yay`
 ```sh
 touch $HOME/.archie-use-paru
 ```
