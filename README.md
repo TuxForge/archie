@@ -90,3 +90,9 @@ You can also use the following command-line argument:
 - `gcc` - GNU Compiler Collection
 - `yay` or `paru` - AUR helpers for Arch Linux
 - `git` - For installing `yay` if it is not already installed
+
+## Notes
+If you want to use `paru` instead of `yay` create a file in `$HOME` called `.archie-use-paru`, and it will install `paru` instead of `yay`
+```bash
+touch $HOME/.archie-use-paru
+```
