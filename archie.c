@@ -2,11 +2,23 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <sys/stat.h>
 
 #define MAX_INPUT_LENGTH 256
 #define COMMAND_BUFFER_SIZE 512
 
+int check_archie_file() {
+    const char *home = getenv("HOME");
+    char path[MAX_INPUT_LENGTH];
+    snprintf(path, sizeof(path), "%s/.archie-use-paru", home);
+    struct stat buffer;
+    return (stat(path, &buffer) == 0);
+}
+
 int check_package_manager() {
+    if (check_archie_file()) {
+        return 2;
+    }
     if (system("command -v yay > /dev/null 2>&1") == 0) {
         return 1;
     }
@@ -28,12 +40,12 @@ void install_git() {
 void install_yay() {
     printf("Installing yay...\n");
     system("mkdir -p $HOME/.cache/archie/made-by-gurov && "
-    "cd $HOME/.cache/archie/made-by-gurov && "
-    "git clone https://aur.archlinux.org/yay-bin.git && "
-    "cd yay-bin && "
-    "makepkg -scCi && "
-    "cd && "
-    "rm -rf $HOME/.cache/archie/");
+           "cd $HOME/.cache/archie/made-by-gurov && "
+           "git clone https://aur.archlinux.org/yay-bin.git && "
+           "cd yay-bin && "
+           "makepkg -scCi && "
+           "cd && "
+           "rm -rf $HOME/.cache/archie/");
     printf("Installation of yay is complete. Please restart your shell and relaunch the script.\n");
 }
 
@@ -123,8 +135,8 @@ void get_input(char *input, const char *prompt) {
 
 int is_valid_command(char command) {
     return command == 'u' || command == 'i' || command == 'r' ||
-    command == 'p' || command == 'c' || command == 'o' ||
-    command == 's' || command == 'h' || command == 'q';
+           command == 'p' || command == 'c' || command == 'o' ||
+           command == 's' || command == 'h' || command == 'q';
 }
 
 void handle_command(const char *input, const char *package_manager) {
@@ -226,13 +238,13 @@ void handle_command(const char *input, const char *package_manager) {
 
 void display_version() {
     printf("    __     \n"
-    " .:--.'.   Archie v1.1 - Fast & easy package management for Arch Linux\n"
-    "/ |   \\ |  Written in C, powered by YAY and pacman.\n"
-    "`\" __ | |  This program may be freely redistributed under\n"
-    " .'.''| |  the terms of the GNU General Public License.\n"
-    "/ /   | |_ Coded with love by Gurov and maintained by scklss AKA skulls\n"
-    "\\ \\._,\\ '/ Have fun <3\n"
-    " `--'  `\" \n");
+           " .:--.'.   Archie v1.1 - Fast & easy package management for Arch Linux\n"
+           "/ |   \\ |  Written in C, powered by YAY and pacman.\n"
+           "`\" __ | |  This program may be freely redistributed under\n"
+           " .'.''| |  the terms of the GNU General Public License.\n"
+           "/ /   | |_ Coded with love by Gurov and maintained by scklss AKA skulls\n"
+           "\\ \\._,\\ '/ Have fun <3\n"
+           " `--'  `\" \n");
 }
 
 int main(int argc, char *argv[]) {
