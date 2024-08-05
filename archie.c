@@ -3,6 +3,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/stat.h>
+#include <stdarg.h>
 
 #define MAX_INPUT_LENGTH 256
 #define COMMAND_BUFFER_SIZE 512
@@ -49,46 +50,41 @@ void install_yay() {
     printf("Installation of yay is complete. Please restart your shell and relaunch the script.\n");
 }
 
-void update_system(const char *package_manager) {
+void execute_command(const char *format, ...) {
     char command[COMMAND_BUFFER_SIZE];
-    snprintf(command, sizeof(command), "%s -Syu", package_manager);
+    va_list args;
+    va_start(args, format);
+    vsnprintf(command, sizeof(command), format, args);
+    va_end(args);
     system(command);
+}
+
+void update_system(const char *package_manager) {
+    execute_command("%s -Syu", package_manager);
 }
 
 void install_package(const char *package_manager, const char *package) {
-    char command[COMMAND_BUFFER_SIZE];
-    snprintf(command, sizeof(command), "%s -S %s", package_manager, package);
-    system(command);
+    execute_command("%s -S %s", package_manager, package);
 }
 
 void remove_package(const char *package_manager, const char *package) {
-    char command[COMMAND_BUFFER_SIZE];
-    snprintf(command, sizeof(command), "%s -R %s", package_manager, package);
-    system(command);
+    execute_command("%s -R %s", package_manager, package);
 }
 
 void purge_package(const char *package_manager, const char *package) {
-    char command[COMMAND_BUFFER_SIZE];
-    snprintf(command, sizeof(command), "%s -Rns %s", package_manager, package);
-    system(command);
+    execute_command("%s -Rns %s", package_manager, package);
 }
 
 void clean_cache(const char *package_manager) {
-    char command[COMMAND_BUFFER_SIZE];
-    snprintf(command, sizeof(command), "%s -Sc", package_manager);
-    system(command);
+    execute_command("%s -Sc", package_manager);
 }
 
 void clean_orphans(const char *package_manager) {
-    char command[COMMAND_BUFFER_SIZE];
-    snprintf(command, sizeof(command), "%s -Rns $(pacman -Qdtq)", package_manager);
-    system(command);
+    execute_command("%s -Rns $(pacman -Qdtq)", package_manager);
 }
 
 void search_package(const char *package_manager, const char *package) {
-    char command[COMMAND_BUFFER_SIZE];
-    snprintf(command, sizeof(command), "%s -Ss %s", package_manager, package);
-    system(command);
+    execute_command("%s -Ss %s", package_manager, package);
 }
 
 void display_help() {
@@ -109,7 +105,7 @@ void prompt_install_yay() {
     printf("Error: Neither yay nor paru is installed.\n");
     sleep(3);
     printf("Do you want to install yay? (y/n): ");
-    scanf("%s", response);
+    scanf("%9s", response);
 
     if (strcmp(response, "y") == 0 || strcmp(response, "yes") == 0) {
         if (!check_git()) {
@@ -124,7 +120,10 @@ void prompt_install_yay() {
 
 void get_input(char *input, const char *prompt) {
     printf("%s", prompt);
-    fgets(input, MAX_INPUT_LENGTH, stdin);
+    if (fgets(input, MAX_INPUT_LENGTH, stdin) == NULL) {
+        fprintf(stderr, "Error reading input.\n");
+        exit(1);
+    }
     input[strcspn(input, "\n")] = 0;
 
     if (strlen(input) == 0) {
@@ -134,32 +133,27 @@ void get_input(char *input, const char *prompt) {
 }
 
 int is_valid_command(char command) {
-    return command == 'u' || command == 'i' || command == 'r' ||
-           command == 'p' || command == 'c' || command == 'o' ||
-           command == 's' || command == 'h' || command == 'q';
+    return strchr("uirpcoshq", command) != NULL;
 }
 
 void handle_command(const char *input, const char *package_manager) {
     char choice = input[0];
     if (strlen(input) == 1 && is_valid_command(choice)) {
+        char package[MAX_INPUT_LENGTH];
         switch (choice) {
             case 'u':
                 update_system(package_manager);
                 break;
             case 'i':
-                printf("Enter package name to install: ");
-                char package[MAX_INPUT_LENGTH];
-                get_input(package, "");
+                get_input(package, "Enter package name to install: ");
                 install_package(package_manager, package);
                 break;
             case 'r':
-                printf("Enter package name to remove: ");
-                get_input(package, "");
+                get_input(package, "Enter package name to remove: ");
                 remove_package(package_manager, package);
                 break;
             case 'p':
-                printf("Enter package name to purge: ");
-                get_input(package, "");
+                get_input(package, "Enter package name to purge: ");
                 purge_package(package_manager, package);
                 break;
             case 'c':
@@ -169,8 +163,7 @@ void handle_command(const char *input, const char *package_manager) {
                 clean_orphans(package_manager);
                 break;
             case 's':
-                printf("Enter package name to search: ");
-                get_input(package, "");
+                get_input(package, "Enter package name to search: ");
                 search_package(package_manager, package);
                 break;
             case 'h':
@@ -179,60 +172,11 @@ void handle_command(const char *input, const char *package_manager) {
             case 'q':
                 exit(0);
             default:
-                printf("Invalid option. Please correct your grammar and type a valid option.\n");
+                fprintf(stderr, "Invalid option. Please type a valid option.\n");
         }
     } else {
-        if (is_valid_command(choice)) {
-            printf("Did you mean \"%c\"? (y/n): ", choice);
-            char response[10];
-            get_input(response, "");
-            if (strcmp(response, "y") == 0 || strcmp(response, "yes") == 0) {
-                switch (choice) {
-                    case 'u':
-                        update_system(package_manager);
-                        break;
-                    case 'i':
-                        printf("Enter package name to install: ");
-                        char package[MAX_INPUT_LENGTH];
-                        get_input(package, "");
-                        install_package(package_manager, package);
-                        break;
-                    case 'r':
-                        printf("Enter package name to remove: ");
-                        get_input(package, "");
-                        remove_package(package_manager, package);
-                        break;
-                    case 'p':
-                        printf("Enter package name to purge: ");
-                        get_input(package, "");
-                        purge_package(package_manager, package);
-                        break;
-                    case 'c':
-                        clean_cache(package_manager);
-                        break;
-                    case 'o':
-                        clean_orphans(package_manager);
-                        break;
-                    case 's':
-                        printf("Enter package name to search: ");
-                        get_input(package, "");
-                        search_package(package_manager, package);
-                        break;
-                    case 'h':
-                        display_help();
-                        break;
-                    case 'q':
-                        exit(0);
-                    default:
-                        printf("Invalid option. Please correct your grammar and type a valid option.\n");
-                }
-            } else {
-                display_help();
-            }
-        } else {
-            printf("Invalid input. Please input a valid command.\n");
-            display_help();
-        }
+        fprintf(stderr, "Invalid input. Please input a valid command.\n");
+        display_help();
     }
 }
 
