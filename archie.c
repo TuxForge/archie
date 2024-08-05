@@ -242,7 +242,7 @@ void display_version() {
            "/ |   \\ |  Written in C, powered by YAY and pacman.\n"
            "`\" __ | |  This program may be freely redistributed under\n"
            " .'.''| |  the terms of the GNU General Public License.\n"
-           "/ /   | |_ Coded with love by Gurov and maintained by scklss AKA skulls\n"
+           "/ /   | |_ Coded with love by Gurov and maintained by scklss & Keiran\n"
            "\\ \\._,\\ '/ Have fun <3\n"
            " `--'  `\" \n");
 }
