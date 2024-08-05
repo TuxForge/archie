@@ -93,7 +93,7 @@ You can also use the following command-line argument:
 
 ## Notes
 If you want to use `paru` instead of `yay` create a file in `$HOME` called `.archie-use-paru`, and it will install `paru` instead of `yay`
-```bash
+```sh
 touch $HOME/.archie-use-paru
 ```
 
