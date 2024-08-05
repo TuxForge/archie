@@ -16,12 +16,13 @@ $ sudo make install
 **Check notes for more information.**
 ## Usage
 ```
-    printf("u - Update the system\n");
-    printf("i - Install a package\n");
-    printf("r - Remove a package\n");
-    printf("p - Purge a package\n");
-    printf("c - Clean cache\n");
-    printf("o - Clean orphaned packages\n");
-    printf("s - Search for a package\n");
-    printf("h - Help\n");
-    printf("q - Quit\n");
+    u - Update the system
+    i - Install a package
+    r - Remove a package
+    p - Purge a package
+    c - Clean cache
+    o - Clean orphaned packages
+    s - Search for a package
+    h - Help
+    q - Quit
+```
