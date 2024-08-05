@@ -11,8 +11,10 @@ $(TARGET): archie.c
 install: $(TARGET)
 	install -m 755 $(TARGET) $(INSTALL_DIR)
 
+uninstall:
+	rm -f $(INSTALL_DIR)/$(TARGET)
+
 clean:
 	rm -f $(TARGET)
 
-.PHONY: all install clean
-
+.PHONY: all install uninstall clean
