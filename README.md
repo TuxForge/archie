@@ -24,13 +24,13 @@ Archie is a command-line tool for managing packages on Arch Linux, providing a s
 2. **Compile the program:**
 
     ```sh
-    gcc -o archie archie.c
+    make
     ```
 
-3. **Run the program:**
+3. **Install the binary to `/usr/bin`** (requires root permissions):
 
     ```sh
-    ./archie
+    sudo make install
     ```
 
 ## Usage
