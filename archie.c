@@ -32,6 +32,7 @@ void display_version();
 char **get_pacman_commands();
 char *command_generator(const char *text, int state);
 char **command_completion(const char *text, int start, int end);
+char* get_package_manager_version(const char *package_manager);
 
 // Function Definitions
 int check_archie_file() {
@@ -275,15 +276,54 @@ void handle_exec_command(const char *command, const char *package_manager) {
     }
 }
 
+char* get_package_manager_version(const char *package_manager) {
+    char command[COMMAND_BUFFER_SIZE];
+    snprintf(command, sizeof(command), "%s --version", package_manager);
+    FILE *fp = popen(command, "r");
+    if (fp == NULL) {
+        return strdup("unknown");
+    }
+
+    char version[COMMAND_BUFFER_SIZE];
+    if (fgets(version, sizeof(version), fp) != NULL) {
+        version[strcspn(version, "\n")] = '\0'; // Remove newline character
+    } else {
+        strcpy(version, "unknown");
+    }
+    pclose(fp);
+
+    // Remove the package manager name from the version string
+    char *version_start = strstr(version, " ");
+    if (version_start != NULL) {
+        version_start++;
+    } else {
+        version_start = version;
+    }
+
+    return strdup(version_start);
+}
+
 void display_version() {
-    printf("    __     \n"
-           " .:--.'.   Archie v1.3 - Fast & easy package management for Arch Linux\n"
-           "/ |   \\ |  Written in C, powered by YAY and pacman.\n"
-           "`\" __ | |  This program may be freely redistributed under\n"
-           " .'.''| |  the terms of the GNU General Public License.\n"
-           "/ /   | |_ Coded with love by Gurov and maintained by scklss & Keiran\n"
-           "\\ \\._,\\ '/ Have fun <3\n"
-           " `--'  `\" \n");
+    int pm_check = check_package_manager();
+    const char *package_manager;
+    if (pm_check == 1) {
+        package_manager = "yay";
+    } else if (pm_check == 2) {
+        package_manager = "paru";
+    } else {
+        package_manager = "none";
+    }
+
+    char *pm_version = get_package_manager_version(package_manager);
+
+    printf("    __     Archie v1.3 - Fast & easy package management for Arch Linux\n"
+           " .:--.'.   Written in C, powered by YAY and Pacman.\n"
+           "/ |   \\ |  %s %s\n"  // Package manager and version
+           "`\" __ | |  \n"
+           " .'.''| |  \n"
+           "/ /   | |_ This program may be freely redistributed under the terms of the GNU General Public License.\n"
+           "\\ \\._,\\ '/ Created & maintained by Gurov\n"
+           " `--'  `\"  With the help of scklss and Keiran\n", package_manager, pm_version);
 }
 
 char **get_pacman_commands() {
