@@ -98,6 +98,8 @@ You can also use the following command-line argument:
 - `gcc` - GNU Compiler Collection
 - `yay` or `paru` - AUR helpers for Arch Linux
 - `git` - For installing `yay` if it is not already installed
+- `readline` - A library for command-line input, probably preinstalled
+- `ncurses` - A library for text-based user interfaces, probably preinstalled
 
 ## Notes
 Archie uses yay by default, but if you only have paru installed it'll use it. If you have both and you want to use `paru` instead of `yay` create a file in `$HOME` called `.archie-use-paru`, and it will install `paru` instead of `yay`
