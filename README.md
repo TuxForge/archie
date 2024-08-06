@@ -33,6 +33,14 @@ Archie is a command-line tool for managing packages on Arch Linux, providing a s
     sudo make install
     ```
 
+4. **AUR:**
+
+    Archie is also available on the [AUR](https://aur.archlinux.org/packages/archie). You can install it using your preferred AUR helper. For example, with `yay`:
+
+    ```sh
+    yay -S archie
+    ```
+
 ## Usage
 
 When you run `archie`, you will see the following prompt:
@@ -91,11 +99,9 @@ You can also use the following command-line argument:
 - `yay` or `paru` - AUR helpers for Arch Linux
 - `git` - For installing `yay` if it is not already installed
 
-## AUR
-Archie is also available on the [aur](https://aur.archlinux.org/) as [archie](https://aur.archlinux.org/packages/archie)
-
 ## Notes
 Archie uses yay by default, but if you only have paru installed it'll use it. If you have both and you want to use `paru` instead of `yay` create a file in `$HOME` called `.archie-use-paru`, and it will install `paru` instead of `yay`
+
 ```sh
 touch $HOME/.archie-use-paru
 ```
