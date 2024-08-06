@@ -27,6 +27,7 @@ void prompt_install_yay();
 void get_input(char *input, const char *prompt);
 int is_valid_command(char command);
 void handle_command(const char *input, const char *package_manager);
+void handle_exec_command(const char *command, const char *package_manager);
 void display_version();
 char **get_pacman_commands();
 char *command_generator(const char *text, int state);
@@ -244,9 +245,39 @@ void handle_command(const char *input, const char *package_manager) {
     }
 }
 
+void handle_exec_command(const char *command, const char *package_manager) {
+    if (strcmp(command, "u") == 0) {
+        update_system(package_manager);
+    } else if (strcmp(command, "i") == 0) {
+        char package[MAX_INPUT_LENGTH];
+        get_input(package, "Enter package name to install: ");
+        install_package(package_manager, package);
+    } else if (strcmp(command, "r") == 0) {
+        char package[MAX_INPUT_LENGTH];
+        get_input(package, "Enter package name to remove: ");
+        remove_package(package_manager, package);
+    } else if (strcmp(command, "p") == 0) {
+        char package[MAX_INPUT_LENGTH];
+        get_input(package, "Enter package name to purge: ");
+        purge_package(package_manager, package);
+    } else if (strcmp(command, "c") == 0) {
+        clean_cache(package_manager);
+    } else if (strcmp(command, "o") == 0) {
+        clean_orphans(package_manager);
+    } else if (strcmp(command, "s") == 0) {
+        char package[MAX_INPUT_LENGTH];
+        get_input(package, "Enter package name to search: ");
+        search_package(package_manager, package);
+    } else if (strcmp(command, "h") == 0) {
+        display_help();
+    } else {
+        printf("Invalid command for --exec: %s\n", command);
+    }
+}
+
 void display_version() {
     printf("    __     \n"
-           " .:--.'.   Archie v1.2 - Fast & easy package management for Arch Linux\n"
+           " .:--.'.   Archie v1.3 - Fast & easy package management for Arch Linux\n"
            "/ |   \\ |  Written in C, powered by YAY and pacman.\n"
            "`\" __ | |  This program may be freely redistributed under\n"
            " .'.''| |  the terms of the GNU General Public License.\n"
@@ -323,6 +354,41 @@ int main(int argc, char *argv[]) {
     if (argc > 1 && strcmp(argv[1], "--version") == 0) {
         display_version();
         return 0;
+    }
+
+    if (argc > 2 && strcmp(argv[1], "--exec") == 0) {
+        const char *package_manager;
+        int pm_check = check_package_manager();
+
+        if (pm_check == 1) {
+            package_manager = "yay";
+        } else if (pm_check == 2) {
+            package_manager = "paru";
+        } else {
+            prompt_install_yay();
+            return 1;
+        }
+
+        handle_exec_command(argv[2], package_manager);
+        return 0; // Exit after executing the command
+    } else if (argc == 2 && strcmp(argv[1], "--exec") == 0) {
+        // If --exec is provided without a command, prompt for input
+        const char *package_manager;
+        int pm_check = check_package_manager();
+
+        if (pm_check == 1) {
+            package_manager = "yay";
+        } else if (pm_check == 2) {
+            package_manager = "paru";
+        } else {
+            prompt_install_yay();
+            return 1;
+        }
+
+        char command[MAX_INPUT_LENGTH];
+        get_input(command, "Enter command to execute (u, i, r, p, c, o, s, h): ");
+        handle_exec_command(command, package_manager);
+        return 0; // Exit after executing the command
     }
 
     const char *package_manager;
