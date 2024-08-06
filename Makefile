@@ -1,5 +1,5 @@
 CC = cc
-CFLAGS = -Wall -Wextra -O2
+CFLAGS = -Wall -Wextra -O2 -lreadline -lncurses
 TARGET = archie
 SRC = archie.c
 INSTALL_DIR = /usr/bin
