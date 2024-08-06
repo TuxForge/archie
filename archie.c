@@ -3,6 +3,8 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/stat.h>
+#include <readline/readline.h>
+#include <readline/history.h>
 
 #define MAX_INPUT_LENGTH 256
 #define COMMAND_BUFFER_SIZE 512
@@ -26,6 +28,9 @@ void get_input(char *input, const char *prompt);
 int is_valid_command(char command);
 void handle_command(const char *input, const char *package_manager);
 void display_version();
+char **get_pacman_commands();
+char *command_generator(const char *text, int state);
+char **command_completion(const char *text, int start, int end);
 
 // Function Definitions
 int check_archie_file() {
@@ -61,12 +66,12 @@ void install_git() {
 void install_yay() {
     printf("Installing yay...\n");
     system("mkdir -p $HOME/.cache/archie/made-by-gurov && "
-    "cd $HOME/.cache/archie/made-by-gurov && "
-    "git clone https://aur.archlinux.org/yay-bin.git && "
-    "cd yay-bin && "
-    "makepkg -scCi && "
-    "cd && "
-    "rm -rf $HOME/.cache/archie/");
+           "cd $HOME/.cache/archie/made-by-gurov && "
+           "git clone https://aur.archlinux.org/yay-bin.git && "
+           "cd yay-bin && "
+           "makepkg -scCi && "
+           "cd && "
+           "rm -rf $HOME/.cache/archie/");
     printf("Installation of yay is complete. Please restart your shell and relaunch the script.\n");
 }
 
@@ -144,8 +149,15 @@ void prompt_install_yay() {
 }
 
 void get_input(char *input, const char *prompt) {
-    printf("%s", prompt);
-    fgets(input, MAX_INPUT_LENGTH, stdin);
+    char *line = readline(prompt);
+    if (line) {
+        strcpy(input, line);
+        free(line);
+    } else {
+        input[0] = '\0'; // Handle EOF
+    }
+
+    // Remove newline character
     input[strcspn(input, "\n")] = 0;
 
     if (strlen(input) == 0) {
@@ -156,8 +168,8 @@ void get_input(char *input, const char *prompt) {
 
 int is_valid_command(char command) {
     return command == 'u' || command == 'i' || command == 'r' ||
-    command == 'p' || command == 'c' || command == 'o' ||
-    command == 's' || command == 'h' || command == 'q';
+           command == 'p' || command == 'c' || command == 'o' ||
+           command == 's' || command == 'h' || command == 'q';
 }
 
 void handle_command(const char *input, const char *package_manager) {
@@ -169,19 +181,25 @@ void handle_command(const char *input, const char *package_manager) {
                 break;
             case 'i': {
                 char package[MAX_INPUT_LENGTH];
+                rl_attempted_completion_function = command_completion;
                 get_input(package, "Enter package name to install: ");
+                rl_attempted_completion_function = NULL;
                 install_package(package_manager, package);
                 break;
             }
             case 'r': {
                 char package[MAX_INPUT_LENGTH];
+                rl_attempted_completion_function = command_completion;
                 get_input(package, "Enter package name to remove: ");
+                rl_attempted_completion_function = NULL;
                 remove_package(package_manager, package);
                 break;
             }
             case 'p': {
                 char package[MAX_INPUT_LENGTH];
+                rl_attempted_completion_function = command_completion;
                 get_input(package, "Enter package name to purge: ");
+                rl_attempted_completion_function = NULL;
                 purge_package(package_manager, package);
                 break;
             }
@@ -213,7 +231,9 @@ void handle_command(const char *input, const char *package_manager) {
             char response[10];
             get_input(response, "");
             if (strcmp(response, "y") == 0 || strcmp(response, "yes") == 0) {
-                handle_command(input, package_manager);
+                // Call the command handler again with the valid command
+                char new_input[2] = { choice, '\0' }; // Create a new input string with the valid command
+                handle_command(new_input, package_manager);
             } else {
                 display_help();
             }
@@ -226,13 +246,77 @@ void handle_command(const char *input, const char *package_manager) {
 
 void display_version() {
     printf("    __     \n"
-    " .:--.'.   Archie v1.1 - Fast & easy package management for Arch Linux\n"
-    "/ |   \\ |  Written in C, powered by YAY and pacman.\n"
-    "`\" __ | |  This program may be freely redistributed under\n"
-    " .'.''| |  the terms of the GNU General Public License.\n"
-    "/ /   | |_ Coded with love by Gurov and maintained by scklss & Keiran\n"
-    "\\ \\._,\\ '/ Have fun <3\n"
-    " `--'  `\" \n");
+           " .:--.'.   Archie v1.1 - Fast & easy package management for Arch Linux\n"
+           "/ |   \\ |  Written in C, powered by YAY and pacman.\n"
+           "`\" __ | |  This program may be freely redistributed under\n"
+           " .'.''| |  the terms of the GNU General Public License.\n"
+           "/ /   | |_ Coded with love by Gurov and maintained by scklss & Keiran\n"
+           "\\ \\._,\\ '/ Have fun <3\n"
+           " `--'  `\" \n");
+}
+
+char **get_pacman_commands() {
+    FILE *fp;
+    char path[1035];
+    char **commands = NULL;
+    int command_count = 0;
+
+    // Execute the pacman -Ssq command
+    fp = popen("pacman -Ssq", "r");
+    if (fp == NULL) {
+        printf("Failed to run command\n");
+        exit(1);
+    }
+
+    // Read the output a line at a time and store it in the commands array
+    while (fgets(path, sizeof(path), fp) != NULL) {
+        command_count++;
+        commands = realloc(commands, sizeof(char *) * (command_count + 1));
+        path[strcspn(path, "\n")] = 0; // Remove newline character
+        commands[command_count - 1] = strdup(path);
+    }
+
+    // Close the file
+    pclose(fp);
+
+    // Null-terminate the array
+    commands[command_count] = NULL;
+
+    return commands;
+}
+
+char *command_generator(const char *text, int state) {
+    static int list_index, len;
+    static char **commands = NULL;
+
+    if (!commands) {
+        commands = get_pacman_commands();
+    }
+
+    // Initialize on first call
+    if (!state) {
+        list_index = 0;
+        len = strlen(text);
+    }
+
+    // Return the next match from the command list
+    while (commands[list_index]) {
+        if (strncmp(commands[list_index], text, len) == 0) {
+            return strdup(commands[list_index++]);
+        } else {
+            list_index++;
+        }
+    }
+
+    // If no more matches, return NULL
+    return NULL;
+}
+
+char **command_completion(const char *text, int start, int end) {
+    (void)start; // Suppress unused parameter warning
+    (void)end;   // Suppress unused parameter warning
+    rl_attempted_completion_over = 1;
+    return rl_completion_matches(text, command_generator);
 }
 
 int main(int argc, char *argv[]) {
@@ -241,10 +325,9 @@ int main(int argc, char *argv[]) {
         return 0;
     }
 
-    char input[MAX_INPUT_LENGTH];
     const char *package_manager;
-
     int pm_check = check_package_manager();
+
     if (pm_check == 1) {
         package_manager = "yay";
     } else if (pm_check == 2) {
@@ -257,8 +340,12 @@ int main(int argc, char *argv[]) {
     printf("Welcome to Archie, type \"h\" for help\n");
 
     while (1) {
-        get_input(input, "$ ");
-        handle_command(input, package_manager);
+        char input_line[MAX_INPUT_LENGTH];
+        get_input(input_line, "$ ");
+        if (*input_line) {
+            add_history(input_line);
+            handle_command(input_line, package_manager);
+        }
     }
 
     return 0;
