@@ -246,7 +246,7 @@ void handle_command(const char *input, const char *package_manager) {
 
 void display_version() {
     printf("    __     \n"
-           " .:--.'.   Archie v1.1 - Fast & easy package management for Arch Linux\n"
+           " .:--.'.   Archie v1.2 - Fast & easy package management for Arch Linux\n"
            "/ |   \\ |  Written in C, powered by YAY and pacman.\n"
            "`\" __ | |  This program may be freely redistributed under\n"
            " .'.''| |  the terms of the GNU General Public License.\n"
