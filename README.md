@@ -33,7 +33,7 @@ Archie is a command-line tool for managing packages on Arch Linux, providing a s
     sudo make install
     ```
 
-4. **AUR:**
+4. **AUR**
 
     Archie is also available on the [AUR](https://aur.archlinux.org/packages/archie). You can install it using your preferred AUR helper. For example, with `yay`:
 
