@@ -77,7 +77,7 @@ void install_yay() {
 
 void update_system(const char *package_manager) {
     char command[COMMAND_BUFFER_SIZE];
-    snprintf(command, sizeof(command), "%s -Syu", package_manager);
+    snprintf(command, sizeof(command), "%s -Syu --noconfirm", package_manager);
     system(command);
 }
 
@@ -101,7 +101,7 @@ void purge_package(const char *package_manager, const char *package) {
 
 void clean_cache(const char *package_manager) {
     char command[COMMAND_BUFFER_SIZE];
-    snprintf(command, sizeof(command), "%s -Sc", package_manager);
+    snprintf(command, sizeof(command), "%s -Sc --noconfirm", package_manager);
     system(command);
 }
 
