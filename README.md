@@ -84,7 +84,7 @@ You can also use the following command-line argument:
 
     ```
         __     
-     .:--.'.   Archie v1.1 - Fast & easy package management for Arch Linux
+     .:--.'.   Archie v1.2 - Fast & easy package management for Arch Linux
     / |   \ |  Written in C, powered by YAY and pacman.
     `" __ | |  This program may be freely redistributed under
      .'.''| |  the terms of the GNU General Public License.
