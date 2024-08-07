@@ -72,7 +72,24 @@ To install a package, type `i` and follow the prompt:
 
 ## Command-Line Arguments
 
-You can also use the following command-line argument:
+- `--exec <command>` - Execute a specific command without entering the interactive prompt. The `<command>` can be one of the following:
+
+   - `u` - Update the system
+   - `i` - Install a package
+   - `r` - Remove a package
+   - `p` - Purge a package
+   - `c` - Clean cache
+   - `o` - Clean orphaned packages
+   - `s` - Search for a package
+   - `h` - Display help
+
+   Example:
+
+   ```sh
+   archie --exec u
+   ```
+
+   This command will update the system directly from the command line. If you run `archie --exec` without specifying a command, you will be prompted to enter a command interactively.
 
 - `--version` - Display the version information:
 
@@ -83,14 +100,14 @@ You can also use the following command-line argument:
     Output:
 
     ```
-        __     
-     .:--.'.   Archie v1.2 - Fast & easy package management for Arch Linux
-    / |   \ |  Written in C, powered by YAY and pacman.
-    `" __ | |  This program may be freely redistributed under
-     .'.''| |  the terms of the GNU General Public License.
-    / /   | |_ Coded with love by Gurov, maintained by scklss & Keiran
-    \ \._,\ '/ Have fun <3
-     `--'  `" 
+        __     Archie v1.3 - Fast & easy package management for Arch Linux
+     .:--.'.   Written in C, powered by YAY and Pacman.
+    / |   \ |  paru v2.0.3 - libalpm v14.0.0
+    `" __ | |  
+     .'.''| |  
+    / /   | |_ This program may be freely redistributed under the terms of the GNU General Public License.
+    \ \._,\ '/ Created & maintained by Gurov
+     `--'  `"  With the help of scklss and Keiran
     ```
 
 ## Dependencies
