@@ -72,8 +72,6 @@ To install a package, type `i` and follow the prompt:
 
 ## Command-Line Arguments
 
-You can also use the following command-line argument:
-
 - `--exec <command>` - Execute a specific command without entering the interactive prompt. The `<command>` can be one of the following:
 
    - `u` - Update the system
