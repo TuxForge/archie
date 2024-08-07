@@ -115,7 +115,7 @@ void clean_orphans(const char *package_manager) {
 
 void search_package(const char *package_manager, const char *package) {
     char command[COMMAND_BUFFER_SIZE];
-    snprintf(command, sizeof(command), "%s -Ss %s", package_manager, package);
+    snprintf(command, sizeof(command), "%s %s", package_manager, package);
     system(command);
 }
 
