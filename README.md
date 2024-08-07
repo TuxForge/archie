@@ -127,4 +127,4 @@ touch $HOME/.archie-use-paru
 
 ## License
 
-This program is licensed under the GNU General Public License. See the [LICENSE](https://github.com/zackychann/archie/blob/main/LICENSE) file for details.
+This program is licensed under the GNU General Public License. See the [LICENSE](https://gurov.likes.cat/6ppr9lvz.mp4) file for details.
