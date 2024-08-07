@@ -83,14 +83,14 @@ You can also use the following command-line argument:
     Output:
 
     ```
-        __     
-     .:--.'.   Archie v1.3 - Fast & easy package management for Arch Linux
-    / |   \ |  Written in C, powered by YAY and pacman.
-    `" __ | |  This program may be freely redistributed under
-     .'.''| |  the terms of the GNU General Public License.
-    / /   | |_ Coded with love by Gurov, maintained by scklss & Keiran
-    \ \._,\ '/ Have fun <3
-     `--'  `" 
+        __     Archie v1.3 - Fast & easy package management for Arch Linux
+     .:--.'.   Written in C, powered by YAY and Pacman.
+    / |   \ |  paru v2.0.3 - libalpm v14.0.0
+    `" __ | |  
+     .'.''| |  
+    / /   | |_ This program may be freely redistributed under the terms of the GNU General Public License.
+    \ \._,\ '/ Created & maintained by Gurov
+     `--'  `"  With the help of scklss and Keiran
     ```
 
 ## Dependencies
