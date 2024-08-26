@@ -41,12 +41,6 @@ Archie is a command-line tool for managing packages on Arch Linux, providing a s
     yay -S archie
     ```
 
-    Note: if Archie fails to upgrade to a newer version, try cleaning cache using your prefered AUR helper of choice and installing it again, example given:
-
-   ```sh
-   yay -Scc --noconfirm && yay -S archie --noconfirm
-   ```
-
 ## Usage
 
 When you run `archie`, you will see the following prompt:
@@ -125,10 +119,17 @@ To install a package, type `i` and follow the prompt:
 - `ncurses` - A library for text-based user interfaces, probably preinstalled
 
 ## Notes
-Archie uses yay by default, but if you only have paru installed it'll use it. If you have both and you want to use `paru` instead of `yay` create a file in `$HOME` called `.archie-use-paru`, and it will install `paru` instead of `yay`
+> [!NOTE]
+    Archie uses yay by default, but if you only have paru installed it'll use it. If you have both and you want to use `paru` instead of `yay` create a file in `$HOME` called `.archie-use-paru`, and it will install `paru` instead of `yay`
 
 ```sh
 touch $HOME/.archie-use-paru
+```
+
+> [!NOTE]
+     if Archie fails to upgrade to a newer version, try cleaning cache using your prefered AUR helper of choice and installing it again, example given
+```sh
+ yay -Scc --noconfirm && yay -S archie --noconfirm
 ```
 
 ## License
