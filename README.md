@@ -17,7 +17,7 @@ Archie is a command-line tool for managing packages on Arch Linux, providing a s
 1. **Clone the repository:**
 
     ```sh
-    git clone https://github.com/zackychann/archie.git
+    git clone https://github.com/TuxForge/archie.git
     cd archie
     ```
 
