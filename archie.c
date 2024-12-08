@@ -447,7 +447,7 @@ int main(int argc, char *argv[]) {
 
     while (1) {
         char input_line[MAX_INPUT_LENGTH];
-        get_input(input_line, "$> ");
+        get_input(input_line, "$ ");
         if (*input_line) {
             add_history(input_line);
             handle_command(input_line, package_manager);
