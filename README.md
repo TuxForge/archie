@@ -2,7 +2,7 @@
 
 ## Overview
 
-Archie is a command-line tool designed to simplify package management on Arch Linux. Leveraging `yay` or `paru`, Archie provides an intuitive interface for common system maintenance and package management tasks.
+**﻿⚠️ Warning: This project is no longer actively maintained due to conflicts among the original maintainers. We strongly recommend users transition to [Archium](https://github.com/keirancc/archium), a fork that is actively maintained and offers a more comprehensive feature set, developed by Keiran.**
 
 ## Features
 
