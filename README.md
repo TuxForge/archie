@@ -2,8 +2,7 @@
 
 ## Overview
 
-**﻿⚠️ Warning: This project is no longer actively maintained due to conflicts among the original maintainers. We strongly recommend users transition to [Archium](https://github.com/keirancc/archium), a fork that is actively maintained and offers a more comprehensive feature set, developed by Keiran.**
-
+**Important Notice:** This project is no longer actively maintained due to conflicts among the original maintainers. We highly recommend that users transition to [Archie-ng](https://github.com/Gur0v/archie-ng), a fork created by one of the original developers that receives regular updates. Alternatively, you may consider [Archium](https://github.com/keircn/archium), which, while not as actively maintained, offers a more comprehensive feature set developed by Keiran.
 ## Features
 
 - **System Updates**: Quickly update your entire system
