@@ -1,8 +1,22 @@
 # Archie: Fast & Easy Package Management for Arch Linux
 
-## Overview
+## 📋 Project Status
 
-**Important Notice:** This project is no longer actively maintained due to conflicts among the original maintainers. We highly recommend that users transition to [Archie-ng](https://github.com/Gur0v/archie-ng), a fork created by one of the original developers that receives regular updates. Alternatively, you may consider [Archium](https://github.com/keircn/archium), which, while not as actively maintained, offers a more comprehensive feature set developed by Keiran.
+**This project is no longer actively maintained** due to disagreements among the original development team. 
+
+### Recommended Alternatives
+
+We encourage users to migrate to one of these actively maintained alternatives:
+
+**🌟 [Archium](https://github.com/keircn/archium)** by [Keiran](https://github.com/keircn)
+- Comprehensive feature set with ongoing development
+- Active community support and regular updates
+
+**🔧 [Archie-ng](https://github.com/Gur0v/archie-ng)** 
+- Maintained fork by one of the original developers
+- Enhanced and refined version of the original codebase
+- More polished user experience
+
 ## Features
 
 - **System Updates**: Quickly update your entire system
